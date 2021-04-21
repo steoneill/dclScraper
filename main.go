@@ -14,6 +14,8 @@ var (
 func main() {
 	fmt.Println("Starting app")
 
+	var Cruises []disney.Cruise
+
 	cruiseClient := disney.NewDisneyClient()
 
 	err := cruiseClient.Login()
@@ -22,18 +24,26 @@ func main() {
 		panic(err)
 	}
 
-	while page < totalPages {
+	for page <= totalPages {
+		req := cruiseClient.CreateRequest(page)
 
+		response, err := cruiseClient.GetCruises(req)
+
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		if page == 2 {
+			totalPages = response.TotalPages
+		}
+
+		for _, cruise := range response.Products {
+			Cruises = append(Cruises, cruise)
+		}
+
+		fmt.Println(Cruises)
+
+		page++
 	}
-
-	req := cruiseClient.CreateRequest(page)
-
-	cruises, err := cruiseClient.GetCruises(req)
-
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	fmt.Println(cruises)
 
 }

@@ -2,17 +2,42 @@ package disney
 
 import (
 	"bytes"
-	json2 "encoding/json"
+	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"log"
 )
 
 type Cruise struct {
-	Name      string  `json:"productName"`
-	Available bool    `json:"available"`
-	Price     []Price `json:"minimumPriceSummary"`
+	Name        string `json:"productName"`
+	Available   bool   `json:"available"`
+	Itineraries []struct {
+		Sailings []struct {
+			Available     bool `json:"available"`
+			TravelParties struct {
+				Party []struct {
+					Price struct {
+						Summary struct {
+							AgeGroup    interface{} `json:"ageGroup"`
+							Currency    string      `json:"currency"`
+							Subtotal    float64     `json:"subtotal"`
+							Tax         float64     `json:"tax"`
+							TaxIncluded bool        `json:"taxIncluded"`
+							Total       float64     `json:"total"`
+						} `json:"summary"`
+					} `json:"price"`
+				} `json:"0"`
+			} `json:"travelParties"`
+		} `json:"sailings"`
+		MinimumPriceSummary struct {
+			AgeGroup    interface{} `json:"ageGroup"`
+			Currency    string      `json:"currency"`
+			Subtotal    float64     `json:"subtotal"`
+			Tax         float64     `json:"tax"`
+			TaxIncluded bool        `json:"taxIncluded"`
+			Total       float64     `json:"total"`
+		} `json:"minimumPriceSummary"`
+	} `json:"itineraries"`
 }
 
 type Price struct {
@@ -24,31 +49,36 @@ type Price struct {
 	Total       float64     `json:"total"`
 }
 
-func (c *CruiseClient) GetCruises(data CruiseData) (cruises []Cruise, err error) {
-	json, err := json2.Marshal(data)
+type Response struct {
+	TotalPages int      `json:"totalPages"`
+	Products   []Cruise `json:"products"`
+}
 
-	var Cruises []Cruise
+func (c *CruiseClient) GetCruises(data CruiseData) (response Response, err error) {
+	j, err := json.Marshal(data)
+
+	var responseObject Response
 
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	res, err := c.httpClient.Post(disneyDataURL, "application/json", bytes.NewReader(json))
+	res, err := c.httpClient.Post(disneyDataURL, "application/json", bytes.NewReader(j))
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	if res.Body == nil {
-		return nil, errors.New("No response body")
+		return responseObject, errors.New("No response body")
 	}
 	body, err := ioutil.ReadAll(res.Body)
 
 	if err != nil {
-		return nil, err
+		return responseObject, err
 	}
 
-	fmt.Println("BODY")
-	fmt.Println(string(body))
-	return Cruises, nil
+	err = json.Unmarshal(body, &responseObject)
+
+	return responseObject, nil
 
 }
