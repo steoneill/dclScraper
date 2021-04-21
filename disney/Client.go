@@ -21,6 +21,8 @@ type CruiseData struct {
 	Affiliations []string   `json:"affiliations"`
 	Page         int        `json:"page"`
 	PageHistory  bool       `json:"pageHistory"`
+	ItineraryId  string     `json:"itineraryId"`
+	ProductId    string     `json:"productId"`
 }
 
 type NonAdultAges struct {
@@ -39,8 +41,9 @@ type PartyMix struct {
 }
 
 const (
-	disneyLoginURL = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/authz/private"
-	disneyDataURL  = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/available-products/"
+	disneyLoginURL    = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/authz/private"
+	disneyDataURL     = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/available-products/"
+	disneySailingsURL = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/available-sailings/"
 )
 
 func NewCruiseClient() *CruiseClient {

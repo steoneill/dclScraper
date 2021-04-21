@@ -5,9 +5,9 @@ import (
 	"fmt"
 )
 
-func (c *CruiseClient) Login() error {
+func (CruiseClient *CruiseClient) Login() error {
 
-	res, err := c.httpClient.Post(disneyLoginURL, "application/json", nil)
+	res, err := CruiseClient.httpClient.Post(disneyLoginURL, "application/json", nil)
 
 	if err != nil {
 		return err

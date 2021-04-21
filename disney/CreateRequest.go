@@ -1,6 +1,6 @@
 package disney
 
-func (c *CruiseClient) CreateRequest(page int) CruiseData {
+func (CruiseClient *CruiseClient) CreateRequest(page int, itineraryId string, productId string) CruiseData {
 
 	req := CruiseData{
 		Currency:     "GBP",
@@ -11,6 +11,8 @@ func (c *CruiseClient) CreateRequest(page int) CruiseData {
 		Affiliations: make([]string, 0),
 		Page:         page,
 		PageHistory:  false,
+		ItineraryId:  itineraryId,
+		ProductId:    productId,
 	}
 
 	return req

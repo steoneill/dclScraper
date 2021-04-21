@@ -8,12 +8,41 @@ import (
 	"log"
 )
 
+type StateRoom struct {
+	Accessible                 bool   `json:"accessible"`
+	Available                  bool   `json:"available"`
+	StateroomType              string `json:"stateroomType"`
+	StateroomSubType           string `json:"stateroomSubType"`
+	StateroomCategory          string `json:"stateroomCategory"`
+	StateroomCategoryContentId string `json:"stateroomCategoryContentId"`
+	StateroomSubTypeContentId  string `json:"stateroomSubTypeContentId"`
+	Price                      Price  `json:"price"`
+}
+
+type Ship struct {
+	Id        string `json:"id"`
+	Name      string `json:"name"`
+	SeawareId string `json:"seawareId"`
+}
+
+type Package struct {
+	PackageID   string `json:"packageId"`
+	PackageCode string `json:"packageCode"`
+}
+
 type Itinerary struct {
-	Sailings []Sailing `json:"sailings"`
+	Sailings    Sailing `json:"sailings"`
+	ItineraryId string  `json:"itineraryId"`
+}
+
+type ItineraryResponse struct {
+	Sailings    []Sailing `json:"sailings"`
+	ItineraryId string    `json:"itineraryId"`
 }
 
 type Cruise struct {
 	Name        string      `json:"productName"`
+	ProductId   string      `json:"productId"`
 	Itineraries []Itinerary `json:"itineraries"`
 }
 
@@ -21,7 +50,7 @@ type Price struct {
 	RateType         string         `json:"rateType"`
 	PromoCode        string         `json:"promoCode"`
 	BreakdownByGuest []PriceSummary `json:"breakdownByGuest"`
-	Summary          []PriceSummary `json:"summary"`
+	Summary          PriceSummary   `json:"summary"`
 }
 
 type PriceSummary struct {
@@ -38,7 +67,7 @@ type Response struct {
 	Products   []Cruise `json:"products"`
 }
 
-func (c *CruiseClient) GetCruises(data CruiseData) (response Response, err error) {
+func (CruiseClient *CruiseClient) GetCruises(data CruiseData) (response Response, err error) {
 	j, err := json.Marshal(data)
 
 	var responseObject Response
@@ -47,7 +76,7 @@ func (c *CruiseClient) GetCruises(data CruiseData) (response Response, err error
 		log.Fatalln(err)
 	}
 
-	res, err := c.httpClient.Post(disneyDataURL, "application/json", bytes.NewReader(j))
+	res, err := CruiseClient.httpClient.Post(disneyDataURL, "application/json", bytes.NewReader(j))
 	if err != nil {
 		log.Fatalln(err)
 	}

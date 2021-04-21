@@ -4,6 +4,7 @@ import (
 	"dclScraper/disney"
 	"fmt"
 	"log"
+	"strings"
 )
 
 var (
@@ -25,11 +26,8 @@ func main() {
 	}
 
 	for page <= totalPages {
-		req := cruiseClient.CreateRequest(page)
+		req := cruiseClient.CreateRequest(page, "", "")
 		response, err := cruiseClient.GetCruises(req)
-
-		fmt.Println(page)
-
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -37,16 +35,24 @@ func main() {
 		totalPages = response.TotalPages
 
 		for _, cruise := range response.Products {
-			fmt.Println(cruise)
+			itinerary, err := cruiseClient.GetSailings(&cruise)
 
-			Cruises = append(Cruises, cruise)
+			if err != nil {
+				log.Println(err)
+			}
+
+			for _, sailing := range itinerary.Sailings {
+				cruise.Itineraries[0].Sailings = sailing
+				Cruises = append(Cruises, cruise)
+			}
 		}
 
 		page++
 	}
 
-	fmt.Println(len(Cruises))
-
-	disney.FindPort(Cruises)
-
+	for i, cruise := range Cruises {
+		if strings.Contains(cruise.Name, "Liverpool") {
+			fmt.Println(Cruises[i])
+		}
+	}
 }
