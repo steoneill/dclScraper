@@ -2,6 +2,7 @@ package main
 
 import (
 	"dclScraper/disney"
+	"dclScraper/twilio"
 	"fmt"
 	"log"
 	"strings"
@@ -51,8 +52,9 @@ func main() {
 	}
 
 	for i, cruise := range Cruises {
-		if strings.Contains(cruise.Name, "Liverpool") {
-			fmt.Println(Cruises[i])
+		if strings.Contains(cruise.Name, "Disney Castaway Cay") {
+			twilio.SendMessage(&Cruises[i])
+			return
 		}
 	}
 }

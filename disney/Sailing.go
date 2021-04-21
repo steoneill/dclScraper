@@ -7,7 +7,9 @@ type Sailing struct {
 		Name      string `json:"name"`
 		SeawareId string `json:"seawareId"`
 	} `json:"ship"`
-	Available     bool `json:"available"`
+	SailDateFrom  string `json:"sailDateFrom"`
+	SailDateTo    string `json:"sailDateTo"`
+	Available     bool   `json:"available"`
 	TravelParties struct {
 		Detail []StateRoom `json:"0"`
 	} `json:"travelParties"`
