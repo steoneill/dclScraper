@@ -43,7 +43,7 @@ const (
 	disneyDataURL  = "https://disneycruise.disney.go.com/dcl-cruise-101-webapi/product-availability/available-products/"
 )
 
-func NewDisneyClient() *CruiseClient {
+func NewCruiseClient() *CruiseClient {
 	jar, err := cookiejar.New(nil)
 
 	if err != nil {

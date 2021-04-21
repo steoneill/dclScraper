@@ -16,7 +16,7 @@ func main() {
 
 	var Cruises []disney.Cruise
 
-	cruiseClient := disney.NewDisneyClient()
+	cruiseClient := disney.NewCruiseClient()
 
 	err := cruiseClient.Login()
 
@@ -26,24 +26,27 @@ func main() {
 
 	for page <= totalPages {
 		req := cruiseClient.CreateRequest(page)
-
 		response, err := cruiseClient.GetCruises(req)
+
+		fmt.Println(page)
 
 		if err != nil {
 			log.Fatalln(err)
 		}
 
-		if page == 2 {
-			totalPages = response.TotalPages
-		}
+		totalPages = response.TotalPages
 
 		for _, cruise := range response.Products {
+			fmt.Println(cruise)
+
 			Cruises = append(Cruises, cruise)
 		}
 
-		fmt.Println(Cruises)
-
 		page++
 	}
+
+	fmt.Println(len(Cruises))
+
+	disney.FindPort(Cruises)
 
 }

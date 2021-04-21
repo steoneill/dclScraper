@@ -8,39 +8,23 @@ import (
 	"log"
 )
 
+type Itinerary struct {
+	Sailings []Sailing `json:"sailings"`
+}
+
 type Cruise struct {
-	Name        string `json:"productName"`
-	Available   bool   `json:"available"`
-	Itineraries []struct {
-		Sailings []struct {
-			Available     bool `json:"available"`
-			TravelParties struct {
-				Party []struct {
-					Price struct {
-						Summary struct {
-							AgeGroup    interface{} `json:"ageGroup"`
-							Currency    string      `json:"currency"`
-							Subtotal    float64     `json:"subtotal"`
-							Tax         float64     `json:"tax"`
-							TaxIncluded bool        `json:"taxIncluded"`
-							Total       float64     `json:"total"`
-						} `json:"summary"`
-					} `json:"price"`
-				} `json:"0"`
-			} `json:"travelParties"`
-		} `json:"sailings"`
-		MinimumPriceSummary struct {
-			AgeGroup    interface{} `json:"ageGroup"`
-			Currency    string      `json:"currency"`
-			Subtotal    float64     `json:"subtotal"`
-			Tax         float64     `json:"tax"`
-			TaxIncluded bool        `json:"taxIncluded"`
-			Total       float64     `json:"total"`
-		} `json:"minimumPriceSummary"`
-	} `json:"itineraries"`
+	Name        string      `json:"productName"`
+	Itineraries []Itinerary `json:"itineraries"`
 }
 
 type Price struct {
+	RateType         string         `json:"rateType"`
+	PromoCode        string         `json:"promoCode"`
+	BreakdownByGuest []PriceSummary `json:"breakdownByGuest"`
+	Summary          []PriceSummary `json:"summary"`
+}
+
+type PriceSummary struct {
 	AgeGroup    interface{} `json:"ageGroup"`
 	Currency    string      `json:"currency"`
 	Subtotal    float64     `json:"subtotal"`
