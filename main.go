@@ -52,7 +52,7 @@ func main() {
 	}
 
 	for i, cruise := range Cruises {
-		if strings.Contains(cruise.Name, "Disney Castaway Cay") {
+		if strings.Contains(cruise.Name, "Liverpool") || strings.Contains(cruise.Name, "Newcastle") {
 			twilio.SendMessage(&Cruises[i])
 			return
 		}

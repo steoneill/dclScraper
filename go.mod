@@ -11,6 +11,7 @@ require (
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/m7shapan/njson v1.0.3
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
+	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/tidwall/gjson v1.7.5 // indirect
 	golang.org/x/net v0.0.0-20210420210106-798c2154c571 // indirect
